@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zifangsky.mapper.UsrUserMapper">
+	<resultMap id="BaseResultMap" type="cn.zifangsky.model.UsrUser">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+		<result column="channelId" property="channelid" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, username, password, mobile, email, createTime,
+		updateTime, channelId,
+		status
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from usr_user
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		usr_user
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="cn.zifangsky.model.UsrUser">
+		insert into usr_user (id,
+		username, password,
+		mobile, email, createTime,
+		updateTime, channelId,
+		status
+		)
+		values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{mobile,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP},
+		#{updatetime,jdbcType=TIMESTAMP}, #{channelid,jdbcType=INTEGER},
+		#{status,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="cn.zifangsky.model.UsrUser">
+		insert into usr_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="username != null">
+				username,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="createtime != null">
+				createTime,
+			</if>
+			<if test="updatetime != null">
+				updateTime,
+			</if>
+			<if test="channelid != null">
+				channelId,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="username != null">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatetime != null">
+				#{updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="channelid != null">
+				#{channelid,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="cn.zifangsky.model.UsrUser">
+		update usr_user
+		<set>
+			<if test="username != null">
+				username = #{username,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				createTime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatetime != null">
+				updateTime = #{updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="channelid != null">
+				channelId = #{channelid,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.zifangsky.model.UsrUser">
+		update usr_user
+		set username = #{username,jdbcType=VARCHAR},
+		password =
+		#{password,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		createTime =
+		#{createtime,jdbcType=TIMESTAMP},
+		updateTime =
+		#{updatetime,jdbcType=TIMESTAMP},
+		channelId =
+		#{channelid,jdbcType=INTEGER},
+		status = #{status,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectByNamePasswd" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from usr_user
+		where username = #{username,jdbcType=VARCHAR} and password =
+		#{password,jdbcType=VARCHAR}
+	</select>
+
+	<select id="findAllCount" resultType="java.lang.Integer"
+		parameterType="cn.zifangsky.model.UsrUser">
+		select count(1) from usr_user
+		<where>
+			<if test="username != null">
+				username = #{username,jdbcType=VARCHAR}
+			</if>
+			<if test="password != null">
+				and password = #{password,jdbcType=VARCHAR}
+			</if>
+			<if test="mobile != null">
+				and mobile = #{mobile,jdbcType=VARCHAR}
+			</if>
+			<if test="email != null">
+				and email = #{email,jdbcType=VARCHAR}
+			</if>
+			<if test="createtime != null">
+				and createTime = #{createtime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updatetime != null">
+				and updateTime = #{updatetime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="channelid != null">
+				and channelId = #{channelid,jdbcType=INTEGER}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<sql id="sqlfileders">
+		<bind name="fileders"
+			value="#{'id':'id','username':'username','password':'password','mobile':'mobile','email':'email','createtime':'createTime','updatetime':'updateTime','channelid':'channelId','status':'status'}" />
+		<bind name="javapropertys"
+			value="#{'id':'id','username':'username','password':'password','mobile':'mobile','email':'email','createTime':'createtime','updateTime':'updatetime','channelId':'channelid','status':'status'}" />
+	</sql>
+	
+	<select id="currentNumId" resultType="java.lang.Long" parameterType="java.lang.Long">
+		select id from usr_user limit #{_parameter},1
+	</select>
+	
+	<select id="findAll" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from usr_user
+		<where>
+			<if test="usrUser.username != null">
+				username = #{usrUser.username,jdbcType=VARCHAR}
+			</if>
+			<if test="usrUser.password != null">
+				and password = #{usrUser.password,jdbcType=VARCHAR}
+			</if>
+			<if test="usrUser.mobile != null">
+				and mobile = #{usrUser.mobile,jdbcType=VARCHAR}
+			</if>
+			<if test="usrUser.email != null">
+				and email = #{usrUser.email,jdbcType=VARCHAR}
+			</if>
+			<if test="usrUser.createtime != null">
+				and createTime = #{usrUser.createtime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="usrUser.updatetime != null">
+				and updateTime = #{usrUser.updatetime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="usrUser.channelid != null">
+				and channelId = #{usrUser.channelid,jdbcType=INTEGER}
+			</if>
+			<if test="usrUser.status != null">
+				and status = #{usrUser.status,jdbcType=VARCHAR}
+			</if>
+			<if test="pageInfo.from !=null">
+				and id >= #{pageInfo.from}
+			</if>
+		</where>
+		<if test="pageInfo.sortName != null and pageInfo.sortOrder != null and pageInfo.perSize != null">
+			order by ${pageInfo.sortName} ${pageInfo.sortOrder} limit #{pageInfo.perSize}
+		</if>
+	</select>
+</mapper>

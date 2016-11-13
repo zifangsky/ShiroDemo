@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+            http://www.springframework.org/schema/jee 
+            http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+            http://www.springframework.org/schema/aop 
+            http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+            http://www.springframework.org/schema/context 
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd
+            http://www.springframework.org/schema/tx 
+            http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop">
+	<description>Shiro 配置</description>
+
+	<!-- 缓存管理 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManager" ref="cacheManagerFactory" />
+		<property name="cacheManagerConfigFile" value="classpath:ehcache.xml" />
+	</bean>
+
+	<!-- Shiro安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="customRealm"></property>
+		<property name="cacheManager" ref="cacheManager"></property>
+	</bean>
+	
+	<!-- 自定义Realm -->
+	<bean id="customRealm" class="cn.zifangsky.security.CustomRealm" />
+	
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager" />
+        <property name="loginUrl" value="/user/user/login.html" />
+        <!-- <property name="successUrl" value="/user/index.html" /> -->
+        <property name="unauthorizedUrl" value="/error/403.jsp" />
+        <property name="filters">
+			<map>
+				<entry key="auth" value-ref="userFilter"/>
+				<entry key="login" value-ref="loginFilter"/>
+				<entry key="clean" value-ref="cleanFilter"/>
+			</map>  
+		</property>
+        <property name="filterChainDefinitions">
+            <value>
+                /error/*= anon
+                /test.html = anon
+                /user/user/check.json = anon
+                /user/user/verify.html = anon
+                /user/user/checkVerifyCode.json = anon
+                /user/index.html = login
+                /user/user/logout.html = logout
+                /user/user/admin.html = roles[manager]
+                /article/index* = perms[WZGL:CX]
+                /article/add* = perms[WZGL:XZ]
+                /article/edit* = perms[WZGL:BJ]
+                /**/*.htm* = auth
+				/**/*.json* = auth
+            </value>
+        </property>
+    </bean>
+
+	<bean id="userFilter" class="cn.zifangsky.security.CustomUserFilter">
+		<property name="ignoreList">
+			<list>
+				<value>login</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="loginFilter" class="cn.zifangsky.security.LoginFilter"/>
+	<bean id="cleanFilter" class="cn.zifangsky.security.CleanFilter"/>
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+</beans>

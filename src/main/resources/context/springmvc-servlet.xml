@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/cache  
+       http://www.springframework.org/schema/cache/spring-cache-4.0.xsd  
+       http://www.springframework.org/schema/mvc 
+       http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd"
+	default-lazy-init="true">
+
+	<bean id="mappingJacksonHttpMessageConverter"
+        class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+                <value>application/json;charset=UTF-8</value>
+            </list>
+        </property>
+        <property name="objectMapper">
+            <bean class="org.codehaus.jackson.map.ObjectMapper">
+                <property name="dateFormat">
+                    <bean class="java.text.SimpleDateFormat">
+                        <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"></constructor-arg>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+    <!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
+    <bean
+        class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="mappingJacksonHttpMessageConverter" /><!-- json转换器 -->
+            </list>
+        </property>
+    </bean>
+    <mvc:annotation-driven
+        content-negotiation-manager="contentNegotiationManager" />
+    <bean id="contentNegotiationManager"
+        class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <!-- true，开启扩展名支持，false关闭支持 -->
+        <property name="favorPathExtension" value="false" />
+        <!-- 用于开启 /userinfo/123?format=json的支持 -->
+        <property name="favorParameter" value="true" />
+        <!-- 设置为true以忽略对Accept Header的支持 -->
+        <property name="ignoreAcceptHeader" value="false" />
+        <property name="mediaTypes">
+            <value>
+                atom=application/atom+xml
+                html=text/html
+                json=application/json
+                xml=application/xml
+                *=*/*
+            </value>
+        </property>
+    </bean>
+    
+	<mvc:annotation-driven />
+	<!-- 组件扫描 -->
+	<context:component-scan base-package="cn.zifangsky.controller" />
+	<context:component-scan base-package="cn.zifangsky.manager.impl" />
+	<!-- 视图控制器 -->
+	<mvc:view-controller path="/user/user/login.html"
+		view-name="/user/user/login" />
+	<mvc:view-controller path="/main.html" view-name="main" />
+	<mvc:view-controller path="/user/index.html"
+		view-name="/user/index" />
+		<mvc:view-controller path="/user/user/admin.html"
+		view-name="/user/user/admin" />
+	<mvc:view-controller path="/article/add.html"
+		view-name="/article/add" />
+	<mvc:view-controller path="/article/edit.html"
+		view-name="/article/edit" />
+
+	<!-- 拦截器 -->
+<!-- 	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/user/user/check.html" />
+			<bean class="cn.zifangsky.interceptor.LoginInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors> -->
+	
+	<!-- 启用shiro的注解功能 -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true" />
+    </bean>
+
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <!-- 登录 -->
+                <prop key="org.apache.shiro.authz.UnauthenticatedException">
+                    redirect:redirect:/user/user/login.html
+                </prop>
+                <!-- 授权 -->
+                <prop key="org.apache.shiro.authz.UnauthorizedException">
+                    redirect:/error/403.jsp
+                </prop>
+            </props>
+        </property>
+        <property name="defaultErrorView" value="/error/error.jsp"/>
+    </bean>
+
+	<!-- 视图解析 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/pages/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+</beans>
