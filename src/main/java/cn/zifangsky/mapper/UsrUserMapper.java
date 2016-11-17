@@ -38,14 +38,6 @@ public interface UsrUserMapper {
 	int findAllCount(UsrUser usrUser);
 
 	/**
-	 * 查询第current条数据的id
-	 * 
-	 * @param current
-	 * @return
-	 */
-	long currentNumId(Long current);
-
-	/**
 	 * 分页查询
 	 * 
 	 * @param pageInfo

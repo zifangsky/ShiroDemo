@@ -66,14 +66,6 @@ public class TestTable {
 	}
 	
 	/**
-	 * 查询第current条数据的id
-	 */
-	@Test
-	public void testCurrent(){
-		System.out.println(userMapper.currentNumId((long) 3));
-	}
-	
-	/**
 	 * 测试分页查询
 	 */
 	@Test
@@ -83,19 +75,21 @@ public class TestTable {
 		long currentPage = 2;
 		//当前页的第一条数据是第几条数据（序列从0开始）
 		long fromNum = (perSize * (currentPage - 1)) < 0 ? 0 : perSize * (currentPage - 1);
-		//当前页的第一条数据的id
-		long fromId = userMapper.currentNumId(fromNum);
 		
 		pageInfo.setPerSize(perSize);
 		pageInfo.setCurrentPage(currentPage);		
-		pageInfo.setFrom(fromId);
-		pageInfo.setSortName("id");
+		pageInfo.setFrom(fromNum);
+		pageInfo.setSortName("channelid");
 		pageInfo.setSortOrder("ASC");
 		
 		UsrUser source = new UsrUser();
 		
 		List<UsrUser> list = userMapper.findAll(pageInfo, source);
-		System.out.println("总数： " + list.size());
+		if(list != null && list.size() > 0){
+			for(UsrUser u : list){
+				System.out.println(u.getId());
+			}
+		}
 		
 	}
 	
