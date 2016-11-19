@@ -22,6 +22,11 @@ import cn.zifangsky.model.UsrFunc;
 import cn.zifangsky.model.bo.UsrRoleBO;
 import cn.zifangsky.model.bo.UsrUserBO;
 
+/**
+ * 自定义Realm，用于自定义登录认证以及自定义授权管理
+ * @author zifangsky
+ *
+ */
 public class CustomRealm extends AuthorizingRealm {
 
 	/**
@@ -31,14 +36,6 @@ public class CustomRealm extends AuthorizingRealm {
 	public String getName() {
 		return "CustomRealm";
 	}
-
-	/**
-	 * 判断此Realm是否支持此Token
-	 * */
-/*	@Override
-	public boolean supports(AuthenticationToken token) {
-		return token instanceof UsernamePasswordToken;
-	}*/
 	
 	/**
 	 * 授权

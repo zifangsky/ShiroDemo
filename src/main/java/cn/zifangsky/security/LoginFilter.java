@@ -34,7 +34,7 @@ public class LoginFilter extends AuthenticatingFilter {
 
 	@Override
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-		return executeLogin(request, response);
+		return this.executeLogin(request, response);
 	}
 
 }

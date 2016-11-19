@@ -127,3 +127,5 @@ CREATE TABLE `usr_user_role` (
 INSERT INTO `usr_user_role` VALUES ('1', '1', '1');
 INSERT INTO `usr_user_role` VALUES ('2', '5', '3');
 INSERT INTO `usr_user_role` VALUES ('3', '5', '5');
+INSERT INTO `usr_user_role` VALUES ('4', '2', '4');
+INSERT INTO `usr_user_role` VALUES ('5', '6', '2');

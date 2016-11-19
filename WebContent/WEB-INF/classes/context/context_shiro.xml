@@ -45,10 +45,6 @@
         <property name="filterChainDefinitions">
             <value>
                 /error/*= anon
-                /test.html = anon
-                /user/user/check.json = anon
-                /user/user/verify.html = anon
-                /user/user/checkVerifyCode.json = anon
                 /user/index.html = login
                 /user/user/logout.html = logout
                 /user/user/admin.html = roles[manager]
@@ -64,7 +60,10 @@
 	<bean id="userFilter" class="cn.zifangsky.security.CustomUserFilter">
 		<property name="ignoreList">
 			<list>
-				<value>login</value>
+				<value>/user/user/login.html</value>
+				<value>/user/user/check.json</value>
+				<value>/user/user/verify.html</value>
+				<value>/user/user/checkVerifyCode.json</value>
 			</list>
 		</property>
 	</bean>
