@@ -18,6 +18,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import cn.zifangsky.common.SpringContextUtils;
 import cn.zifangsky.model.UsrFunc;
 import cn.zifangsky.model.bo.UsrRoleBO;
 import cn.zifangsky.model.bo.UsrUserBO;
@@ -77,8 +78,9 @@ public class CustomRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-		HttpServletRequest request = attributes.getRequest();
+//		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+//		HttpServletRequest request = attributes.getRequest();
+		HttpServletRequest request = SpringContextUtils.getRequest();
 		
 		UsrUserBO userBO = (UsrUserBO) request.getSession().getAttribute("userBO");
 		SimpleAuthenticationInfo info = null;
